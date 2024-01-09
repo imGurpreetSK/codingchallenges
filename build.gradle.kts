@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.clikt)
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 

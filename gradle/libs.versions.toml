@@ -1,0 +1,9 @@
+[versions]
+clikt = "4.2.1"
+
+[libraries]
+clikt = { group = "com.github.ajalt.clikt", name = "clikt", version.ref = "clikt" }
+
+[bundles]
+
+[plugins]
