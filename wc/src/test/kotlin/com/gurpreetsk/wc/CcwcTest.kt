@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WcTest {
+class CcwcTest {
 
     @Test
     fun `return number of bytes in file`() {
