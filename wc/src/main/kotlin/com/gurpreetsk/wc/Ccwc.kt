@@ -5,7 +5,15 @@ import java.io.File
 object Ccwc {
 
     fun run(arg: SupportedArgs, path: File): Pair<Long, String> {
-        return getByteCountFor(path)
+        return if (arg == SupportedArgs.BYTES) {
+            getByteCountFor(path)
+        } else {
+            getLineCountFor(path)
+        }
+    }
+
+    private fun getLineCountFor(path: File): Pair<Long, String> {
+        return path.useLines { it.count() }.toLong() to path.name
     }
 
     private fun getByteCountFor(path: File): Pair<Long, String> {
@@ -17,5 +25,6 @@ object Ccwc {
 
     enum class SupportedArgs(val arg: String) {
         BYTES("-c"),
+        LINES("-l"),
     }
 }
