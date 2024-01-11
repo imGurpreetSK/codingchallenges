@@ -38,4 +38,15 @@ class CcwcTest {
         assertEquals(58164, result.first)
         assertEquals("test.txt", result.second)
     }
+
+    @Test
+    fun `return number of characters in file`() {
+        val result = Ccwc.run(
+            Ccwc.SupportedArgs.CHARACTERS,
+            File("/Users/gurpreet/IdeaProjects/codingchallenges/wc/src/test/resources/test.txt")
+        )
+
+        assertEquals(339292, result.first)
+        assertEquals("test.txt", result.second)
+    }
 }
