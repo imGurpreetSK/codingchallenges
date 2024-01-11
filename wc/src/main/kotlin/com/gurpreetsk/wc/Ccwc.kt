@@ -1,7 +1,6 @@
 package com.gurpreetsk.wc
 
-import com.gurpreetsk.wc.internal.ByteSizeCalculator
-import com.gurpreetsk.wc.internal.LinesCalculator
+import com.gurpreetsk.wc.internal.*
 import java.io.File
 
 object Ccwc {
@@ -9,6 +8,7 @@ object Ccwc {
     private val commandProcessor = mapOf(
         SupportedArgs.BYTES to ByteSizeCalculator,
         SupportedArgs.LINES to LinesCalculator,
+        SupportedArgs.WORDS to WordsCalculator
     )
 
     fun run(arg: SupportedArgs, path: File): Pair<Long, String> {
@@ -22,5 +22,6 @@ object Ccwc {
     enum class SupportedArgs(val arg: String) {
         BYTES("-c"),
         LINES("-l"),
+        WORDS("-w"),
     }
 }
