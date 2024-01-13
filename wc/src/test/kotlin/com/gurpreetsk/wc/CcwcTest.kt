@@ -13,7 +13,7 @@ class CcwcTest {
             File("/Users/gurpreet/IdeaProjects/codingchallenges/wc/src/test/resources/test.txt")
         )
 
-        assertEquals(342190, result.first)
+        assertEquals("342190", result.first)
         assertEquals("test.txt", result.second)
     }
 
@@ -24,7 +24,7 @@ class CcwcTest {
             File("/Users/gurpreet/IdeaProjects/codingchallenges/wc/src/test/resources/test.txt")
         )
 
-        assertEquals(7145, result.first)
+        assertEquals("7145", result.first)
         assertEquals("test.txt", result.second)
     }
 
@@ -35,7 +35,7 @@ class CcwcTest {
             File("/Users/gurpreet/IdeaProjects/codingchallenges/wc/src/test/resources/test.txt")
         )
 
-        assertEquals(58164, result.first)
+        assertEquals("58164", result.first)
         assertEquals("test.txt", result.second)
     }
 
@@ -46,7 +46,18 @@ class CcwcTest {
             File("/Users/gurpreet/IdeaProjects/codingchallenges/wc/src/test/resources/test.txt")
         )
 
-        assertEquals(339292, result.first)
+        assertEquals("339292", result.first)
+        assertEquals("test.txt", result.second)
+    }
+
+    @Test
+    fun `return line, word and bytes count when no args are passed`() {
+        val result = Ccwc.run(
+            null,
+            File("/Users/gurpreet/IdeaProjects/codingchallenges/wc/src/test/resources/test.txt")
+        )
+
+        assertEquals("7145  58164  342190", result.first)
         assertEquals("test.txt", result.second)
     }
 }

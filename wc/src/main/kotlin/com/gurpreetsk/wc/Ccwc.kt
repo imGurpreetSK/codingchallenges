@@ -12,12 +12,16 @@ object Ccwc {
         SupportedArgs.CHARACTERS to CharactersCalculator
     )
 
-    fun run(arg: SupportedArgs, path: File): Pair<Long, String> {
+    fun run(arg: SupportedArgs?, path: File): Pair<String, String> {
+        if (arg == null) {
+            return "${commandProcessor[SupportedArgs.LINES]!!.calculate(path)}  ${commandProcessor[SupportedArgs.WORDS]!!.calculate(path)}  ${commandProcessor[SupportedArgs.BYTES]!!.calculate(path)}" to path.name
+        }
+
         if (commandProcessor[arg] == null) {
             throw UnsupportedOperationException("Unknown argument $arg")
         }
 
-        return commandProcessor[arg]!!.calculate(path) to path.name
+        return commandProcessor[arg]!!.calculate(path).toString() to path.name
     }
 
     enum class SupportedArgs(val arg: String) {
