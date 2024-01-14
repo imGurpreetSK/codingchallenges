@@ -3,7 +3,7 @@ package com.gurpreetsk.wc
 import com.gurpreetsk.wc.internal.*
 import java.io.File
 
-object Ccwc {
+object CcwcRunner {
 
     private val commandProcessor = mapOf(
         SupportedArgs.BYTES to ByteSizeCalculator,
@@ -11,6 +11,26 @@ object Ccwc {
         SupportedArgs.WORDS to WordsCalculator,
         SupportedArgs.CHARACTERS to CharactersCalculator
     )
+
+    @JvmStatic
+    fun main(arguments: Array<String>) {
+        val filePath: String
+        val arg: String?
+        if (arguments.size == 1) {
+            arg = null
+            filePath = arguments[0]
+        } else {
+            arg = arguments[0]
+            filePath = arguments[1]
+        }
+
+        println(
+            run(
+                SupportedArgs.entries.find { it.arg == arg },
+                File(filePath)
+            )
+        )
+    }
 
     fun run(arg: SupportedArgs?, path: File): Pair<String, String> {
         if (arg == null) {
