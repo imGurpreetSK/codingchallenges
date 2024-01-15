@@ -3,3 +3,4 @@ plugins {
 }
 rootProject.name = "codingchallenges"
 include("wc")
+include("jsonparser")
