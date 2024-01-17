@@ -1,3 +1,3 @@
 package com.gurpreetsk.jsonparser
 
-class Main
+class SimpleJsonParser
