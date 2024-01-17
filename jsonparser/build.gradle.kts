@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("com.google.truth:truth:1.1.3")
 }
 
 tasks.test {
