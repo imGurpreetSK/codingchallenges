@@ -15,4 +15,15 @@ class SimpleJsonParserTest {
 
         assertThat(result).isEqualTo(1)
     }
+
+    @Test
+    fun `return 0 if parsing succeeds - simple JSON`() {
+        val input = javaClass.classLoader.getResourceAsStream("testdata/step1/valid.json").use {
+            it.bufferedReader().readText()
+        }
+
+        val result = SimpleJsonParser().parse(input)
+
+        assertThat(result).isEqualTo(0)
+    }
 }
