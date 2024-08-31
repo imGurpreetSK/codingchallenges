@@ -1,37 +1,142 @@
 package com.gurpreetsk.sudoku.composeApp
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.gurpreetsk.sudoku.shared.Greeting
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import sudoku.composeapp.generated.resources.Res
-import sudoku.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+        Grid(
+            Modifier
+                .aspectRatio(1f)
+                .fillMaxSize()
+        )
+    }
+}
+
+@Composable
+private fun Grid(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .border(0.5.dp, Color.Black)
+            .defaultMinSize(300.dp, 300.dp)
+    ) {
+        for (i in 0 until 3) {
+            Row(modifier = Modifier.weight(0.33f)) {
+                for (j in 0 until 3) {
+                    UnitBox(Modifier.weight(0.33f))
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun UnitBox(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .border(0.36.dp, Color.Black)
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(0.33f)
+                .wrapContentSize()
+        ) {
+            Text(
+                "A",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+            Text(
+                "B",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+            Text(
+                "C",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .weight(0.33f)
+                .wrapContentSize()
+        ) {
+            Text(
+                "D",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+            Text(
+                "E",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+            Text(
+                "F",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .weight(0.33f)
+                .wrapContentSize()
+        ) {
+            Text(
+                "G",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+            Text(
+                "H",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
+            Text(
+                "I",
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(0.3.dp, Color.Gray)
+            )
         }
     }
 }

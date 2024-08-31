@@ -16,6 +16,13 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/sudoku" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/sudoku" />
+            <option value="$PROJECT_DIR$/sudoku/composeApp" />
+            <option value="$PROJECT_DIR$/sudoku/shared" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
