@@ -1,4 +1,4 @@
-package com.gurpreetsk.sudoku.composeApp
+package com.gurpreetsk.sudoku.shared
 
 data class GridData(
     val items: Array<Array<Cell>>
@@ -36,5 +36,4 @@ data class Cell(
     }
 }
 
-data class CellCoordinates(val x: Int, val y: Int)
-data class ValueCoordinates(val x: Int, val y: Int)
+data class Coordinates(val x: Int, val y: Int)

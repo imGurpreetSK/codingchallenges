@@ -1,6 +1,7 @@
 package com.gurpreetsk.sudoku.composeApp
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -10,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.gurpreetsk.sudoku.shared.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -107,8 +109,8 @@ fun App() {
 
 private fun onValueUpdated(
     updatedValue: Int,
-    cellCoordinates: CellCoordinates,
-    valueCoordinates: ValueCoordinates
+    cellCoordinates: Coordinates,
+    valueCoordinates: Coordinates
 ) {
     println("Value updated for ($cellCoordinates, $valueCoordinates) to $updatedValue.")
 }
@@ -116,7 +118,7 @@ private fun onValueUpdated(
 @Composable
 private fun Grid(
     data: GridData,
-    onValueUpdated: (value: Int, CellCoordinates, ValueCoordinates) -> Unit,
+    onValueUpdated: (value: Int, Coordinates, Coordinates) -> Unit,
     onUnsupportedKeyPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -130,7 +132,7 @@ private fun Grid(
                 for (j in 0 until 3) {
                     UnitBox(
                         data.items[i][j],
-                        { value, valueCoordinates -> onValueUpdated(value, CellCoordinates(i, j), valueCoordinates) },
+                        { value, valueCoordinates -> onValueUpdated(value, Coordinates(i, j), valueCoordinates) },
                         onUnsupportedKeyPressed,
                         Modifier.weight(0.33f)
                     )
@@ -143,7 +145,7 @@ private fun Grid(
 @Composable
 private fun UnitBox(
     data: Cell,
-    onValueUpdated: (value: Int, ValueCoordinates) -> Unit,
+    onValueUpdated: (value: Int, Coordinates) -> Unit,
     onUnsupportedKeyPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -165,10 +167,11 @@ private fun UnitBox(
                         modifier = Modifier
                             .aspectRatio(1f)
                             .border(0.3.dp, Color.Gray)
+                            .clickable {  }
                             .onPreviewKeyEvent {
                                 if (it.type == KeyEventType.KeyUp) {
                                     if (it.isSupportedKey()) {
-                                        onValueUpdated(it.key.nativeKeyCode - 48, ValueCoordinates(i, j))
+                                        onValueUpdated(it.key.nativeKeyCode - 48, Coordinates(i, j))
                                         true
                                     } else {
                                         if (it.key != Key.Tab) {
