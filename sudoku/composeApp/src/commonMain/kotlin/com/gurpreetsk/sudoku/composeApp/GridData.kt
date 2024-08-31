@@ -35,3 +35,6 @@ data class Cell(
         return items.contentDeepHashCode()
     }
 }
+
+data class CellCoordinates(val x: Int, val y: Int)
+data class ValueCoordinates(val x: Int, val y: Int)

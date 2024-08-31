@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -15,7 +16,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        val data by remember {
+        val gridState by remember {
             mutableStateOf(
                 GridData(
                     arrayOf(
@@ -94,7 +95,9 @@ fun App() {
         }
 
         Grid(
-            data,
+            gridState,
+            { value, cellCoordinates, valueCoordinates -> onValueUpdated(value, cellCoordinates, valueCoordinates) },
+            { println("Unsupported key clicked") },
             modifier = Modifier
                 .aspectRatio(1f)
                 .fillMaxSize()
@@ -102,9 +105,19 @@ fun App() {
     }
 }
 
+private fun onValueUpdated(
+    updatedValue: Int,
+    cellCoordinates: CellCoordinates,
+    valueCoordinates: ValueCoordinates
+) {
+    println("Value updated for ($cellCoordinates, $valueCoordinates) to $updatedValue.")
+}
+
 @Composable
 private fun Grid(
     data: GridData,
+    onValueUpdated: (value: Int, CellCoordinates, ValueCoordinates) -> Unit,
+    onUnsupportedKeyPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -117,6 +130,8 @@ private fun Grid(
                 for (j in 0 until 3) {
                     UnitBox(
                         data.items[i][j],
+                        { value, valueCoordinates -> onValueUpdated(value, CellCoordinates(i, j), valueCoordinates) },
+                        onUnsupportedKeyPressed,
                         Modifier.weight(0.33f)
                     )
                 }
@@ -128,6 +143,8 @@ private fun Grid(
 @Composable
 private fun UnitBox(
     data: Cell,
+    onValueUpdated: (value: Int, ValueCoordinates) -> Unit,
+    onUnsupportedKeyPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -148,10 +165,36 @@ private fun UnitBox(
                         modifier = Modifier
                             .aspectRatio(1f)
                             .border(0.3.dp, Color.Gray)
+                            .onPreviewKeyEvent {
+                                if (it.type == KeyEventType.KeyUp) {
+                                    if (it.isSupportedKey()) {
+                                        onValueUpdated(it.key.nativeKeyCode - 48, ValueCoordinates(i, j))
+                                        true
+                                    } else {
+                                        if (it.key != Key.Tab) {
+                                            onUnsupportedKeyPressed()
+                                        }
+                                        false
+                                    }
+                                } else {
+                                    false
+                                }
+                            }
                     )
                 }
             }
-
         }
     }
+}
+
+private fun KeyEvent.isSupportedKey(): Boolean {
+    return key == Key.One ||
+            key == Key.Two ||
+            key == Key.Three ||
+            key == Key.Four ||
+            key == Key.Five ||
+            key == Key.Six ||
+            key == Key.Seven ||
+            key == Key.Eight ||
+            key == Key.Nine
 }
