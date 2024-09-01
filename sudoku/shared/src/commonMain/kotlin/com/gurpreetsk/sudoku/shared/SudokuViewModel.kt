@@ -95,32 +95,31 @@ class SudokuViewModel(dispatcher: CoroutineDispatcher) { // Make internal - need
         _state.update {
             println("Value updated for ($subGridCoordinates, $cellCoordinates) to $updatedValue.")
             val initialGrid = _state.value
-            val updatedGrid = getUpdatedGrid(initialGrid, updatedValue, subGridCoordinates, cellCoordinates)
+            val updatedGrid = initialGrid.getUpdatedGrid(updatedValue, subGridCoordinates, cellCoordinates)
 
             return@update updatedGrid
         }
     }
 
-    private fun getUpdatedGrid(
-        initialGrid: Grid,
+    private fun Grid.getUpdatedGrid(
         updatedValue: UInt,
         subGridCoordinates: Coordinates,
         cellCoordinates: Coordinates
     ): Grid {
-        if (initialGrid.items[subGridCoordinates.y][subGridCoordinates.x].items[cellCoordinates.y][cellCoordinates.x]?.isEditable == false) {
-            return initialGrid
+        if (items[subGridCoordinates.y][subGridCoordinates.x].items[cellCoordinates.y][cellCoordinates.x]?.isEditable == false) {
+            return this
         }
 
-        val subGridToUpdate: SubGrid = initialGrid.items[subGridCoordinates.y][subGridCoordinates.x]
+        val subGridToUpdate: SubGrid = items[subGridCoordinates.y][subGridCoordinates.x]
 
         val updatedRow = subGridToUpdate.items[cellCoordinates.y].toMutableList()
         updatedRow[cellCoordinates.x] = Cell(updatedValue)
         val updatedSubGrid = subGridToUpdate.items.toMutableList()
         updatedSubGrid[cellCoordinates.y] = updatedRow
-        val updatedGridRow = initialGrid.items[subGridCoordinates.y].toMutableList()
+        val updatedGridRow = items[subGridCoordinates.y].toMutableList()
         updatedGridRow[subGridCoordinates.x] = SubGrid(updatedSubGrid)
 
-        val updatedGrid = initialGrid.items.toMutableList()
+        val updatedGrid = items.toMutableList()
         updatedGrid[subGridCoordinates.y] = updatedGridRow
 
         return Grid(updatedGrid)
