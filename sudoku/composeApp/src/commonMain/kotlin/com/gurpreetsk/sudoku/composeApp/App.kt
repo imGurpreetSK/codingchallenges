@@ -21,7 +21,7 @@ fun App(viewModel: SudokuViewModel) {
         val gridState by viewModel.state.collectAsState()
 
         Grid(
-            gridState,
+            gridState.grid,
             { value, cellCoordinates, valueCoordinates -> viewModel.updateValue(value.toUInt(), cellCoordinates, valueCoordinates) },
             { println("Unsupported key clicked") },
             modifier = Modifier

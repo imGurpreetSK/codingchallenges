@@ -83,9 +83,9 @@ class SudokuViewModel(dispatcher: CoroutineDispatcher) { // Make internal - need
         )
     )
 
-    private val _state = MutableStateFlow(initialGrid)
-    val state: StateFlow<Grid> = _state
-        .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialGrid)
+    private val _state: MutableStateFlow<SudokuState> = MutableStateFlow(SudokuState(initialGrid, false))
+    val state: StateFlow<SudokuState> = _state
+        .stateIn(scope, SharingStarted.WhileSubscribed(5000), SudokuState(initialGrid, false))
 
     fun updateValue(
         updatedValue: UInt,
@@ -94,11 +94,15 @@ class SudokuViewModel(dispatcher: CoroutineDispatcher) { // Make internal - need
     ) {
         _state.update {
             println("Value updated for ($subGridCoordinates, $cellCoordinates) to $updatedValue.")
-            val initialGrid = _state.value
-            val updatedGrid = initialGrid.getUpdatedGrid(updatedValue, subGridCoordinates, cellCoordinates)
+            val initialState = _state.value
+            val updatedGrid = initialState.grid.getUpdatedGrid(updatedValue, subGridCoordinates, cellCoordinates)
 
-            return@update updatedGrid
+            return@update SudokuState(updatedGrid, updatedGrid.isSolutionValid())
         }
+    }
+
+    private fun Grid.isSolutionValid(): Boolean {
+        return false
     }
 
     private fun Grid.getUpdatedGrid(
