@@ -7,7 +7,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.coroutines.core)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.coroutines.test)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.coroutines.jvm)
         }
     }
 }
