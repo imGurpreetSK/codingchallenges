@@ -16,89 +16,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App() {
+fun App(viewModel: SudokuViewModel) {
     MaterialTheme {
-        val gridState by remember {
-            mutableStateOf(
-                GridData(
-                    arrayOf(
-                        arrayOf(
-                            Cell(
-                                arrayOf(
-                                    arrayOf(1u, 1u, 1u),
-                                    arrayOf(1u, 1u, 1u),
-                                    arrayOf(1u, 1u, 1u),
-                                )
-                            ),
-                            Cell(
-                                arrayOf(
-                                    arrayOf(2u, 2u, 2u),
-                                    arrayOf(2u, 2u, 2u),
-                                    arrayOf(2u, 2u, 2u),
-                                )
-                            ),
-                            Cell(
-                                arrayOf(
-                                    arrayOf(3u, 3u, 3u),
-                                    arrayOf(3u, 3u, 3u),
-                                    arrayOf(3u, 3u, 3u),
-                                )
-                            )
-                        ),
-                        arrayOf(
-                            Cell(
-                                arrayOf(
-                                    arrayOf(4u, 4u, 4u),
-                                    arrayOf(4u, 4u, 4u),
-                                    arrayOf(4u, 4u, 4u),
-                                )
-                            ),
-                            Cell(
-                                arrayOf(
-                                    arrayOf(5u, 5u, 5u),
-                                    arrayOf(5u, 5u, 5u),
-                                    arrayOf(5u, 5u, 5u),
-                                )
-                            ),
-                            Cell(
-                                arrayOf(
-                                    arrayOf(6u, 6u, 6u),
-                                    arrayOf(6u, 6u, 6u),
-                                    arrayOf(6u, 6u, 6u),
-                                )
-                            )
-                        ),
-                        arrayOf(
-                            Cell(
-                                arrayOf(
-                                    arrayOf(7u, 7u, 7u),
-                                    arrayOf(7u, 7u, 7u),
-                                    arrayOf(7u, 7u, 7u),
-                                )
-                            ),
-                            Cell(
-                                arrayOf(
-                                    arrayOf(8u, 8u, 8u),
-                                    arrayOf(8u, 8u, 8u),
-                                    arrayOf(8u, 8u, 8u),
-                                )
-                            ),
-                            Cell(
-                                arrayOf(
-                                    arrayOf(9u, 9u, 9u),
-                                    arrayOf(9u, 9u, 9u),
-                                    arrayOf(9u, 9u, 9u),
-                                )
-                            )
-                        ),
-                    )
-                )
-            )
-        }
+        val gridState by viewModel.state.collectAsState()
 
         Grid(
             gridState,
-            { value, cellCoordinates, valueCoordinates -> onValueUpdated(value, cellCoordinates, valueCoordinates) },
+            { value, cellCoordinates, valueCoordinates -> viewModel.updateValue(value.toUInt(), cellCoordinates, valueCoordinates) },
             { println("Unsupported key clicked") },
             modifier = Modifier
                 .aspectRatio(1f)
