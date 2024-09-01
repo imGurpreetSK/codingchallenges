@@ -48,7 +48,7 @@ private fun Grid(
                 for (j in 0 until 3) {
                     SubGrid(
                         data.items[i][j],
-                        { value, valueCoordinates -> onValueUpdated(value, Coordinates(i, j), valueCoordinates) },
+                        { value, valueCoordinates -> onValueUpdated(value, Coordinates(j, i), valueCoordinates) },
                         onUnsupportedKeyPressed,
                         Modifier.weight(0.33f)
                     )
@@ -91,7 +91,7 @@ private fun SubGrid(
 
                                 if (it.type == KeyEventType.KeyUp) {
                                     if (it.isSupportedKey()) {
-                                        onValueUpdated(it.key.nativeKeyCode - 48, Coordinates(i, j))
+                                        onValueUpdated(it.key.nativeKeyCode - 48, Coordinates(j, i))
                                         true
                                     } else {
                                         if (it.key != Key.Tab) {
