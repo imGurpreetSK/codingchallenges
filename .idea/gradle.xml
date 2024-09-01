@@ -20,6 +20,7 @@
           <set>
             <option value="$PROJECT_DIR$/sudoku" />
             <option value="$PROJECT_DIR$/sudoku/composeApp" />
+            <option value="$PROJECT_DIR$/sudoku/server" />
             <option value="$PROJECT_DIR$/sudoku/shared" />
           </set>
         </option>

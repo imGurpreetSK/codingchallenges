@@ -107,17 +107,9 @@ fun App() {
     }
 }
 
-private fun onValueUpdated(
-    updatedValue: Int,
-    cellCoordinates: Coordinates,
-    valueCoordinates: Coordinates
-) {
-    println("Value updated for ($cellCoordinates, $valueCoordinates) to $updatedValue.")
-}
-
 @Composable
 private fun Grid(
-    data: GridData,
+    data: Grid,
     onValueUpdated: (value: Int, Coordinates, Coordinates) -> Unit,
     onUnsupportedKeyPressed: () -> Unit,
     modifier: Modifier = Modifier
@@ -130,7 +122,7 @@ private fun Grid(
         for (i in 0 until 3) {
             Row(modifier = Modifier.weight(0.33f)) {
                 for (j in 0 until 3) {
-                    UnitBox(
+                    SubGrid(
                         data.items[i][j],
                         { value, valueCoordinates -> onValueUpdated(value, Coordinates(i, j), valueCoordinates) },
                         onUnsupportedKeyPressed,
@@ -143,8 +135,8 @@ private fun Grid(
 }
 
 @Composable
-private fun UnitBox(
-    data: Cell,
+private fun SubGrid(
+    data: SubGrid,
     onValueUpdated: (value: Int, Coordinates) -> Unit,
     onUnsupportedKeyPressed: () -> Unit,
     modifier: Modifier = Modifier
@@ -161,7 +153,7 @@ private fun UnitBox(
             ) {
                 for (j in 0..2) {
                     Text(
-                        data.items[i][j]?.toString() ?: "",
+                        data.items[i][j]?.data?.toString() ?: "",
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         modifier = Modifier
@@ -169,6 +161,10 @@ private fun UnitBox(
                             .border(0.3.dp, Color.Gray)
                             .clickable {  }
                             .onPreviewKeyEvent {
+                                if (data.items[i][j]?.isEditable == false) {
+                                    return@onPreviewKeyEvent false
+                                }
+
                                 if (it.type == KeyEventType.KeyUp) {
                                     if (it.isSupportedKey()) {
                                         onValueUpdated(it.key.nativeKeyCode - 48, Coordinates(i, j))
