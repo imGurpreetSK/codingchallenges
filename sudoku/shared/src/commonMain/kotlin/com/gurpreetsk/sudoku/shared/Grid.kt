@@ -9,7 +9,7 @@ data class SubGrid(
 )
 
 data class Cell(
-    val data: UInt?,
+    val data: UInt,
     val isEditable: Boolean = true
 )
 

@@ -10,6 +10,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "sudoku",
     ) {
-        App(SudokuViewModel(Dispatchers.Main))
+        App(SudokuViewModel(TODO(), Dispatchers.Main))
     }
 }

@@ -3,85 +3,16 @@ package com.gurpreetsk.sudoku.shared
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class SudokuViewModel(dispatcher: CoroutineDispatcher) { // Make internal - needs DI framework.
+class SudokuViewModel(
+    repository: SudokuRepository,
+    dispatcher: CoroutineDispatcher
+) { // Make internal - needs DI framework.
 
     private val scope = CoroutineScope(
         SupervisorJob() + dispatcher + CoroutineName("main-coroutine-sudoku-view-model")
     )
 
-    private val initialGrid = Grid(
-        listOf(
-            listOf(
-                SubGrid(
-                    listOf(
-                        listOf(null, Cell(5u, false), null),
-                        listOf(null, null, null),
-                        listOf(null, Cell(1u, false), Cell(9u, false)),
-                    )
-                ),
-                SubGrid(
-                    listOf(
-                        listOf(Cell(1u, false), Cell(7u, false), Cell(9u, false)),
-                        listOf(null, null, Cell(4u, false)),
-                        listOf(null, null, null),
-                    )
-                ),
-                SubGrid(
-                    listOf(
-                        listOf(Cell(3u, false), Cell(8u, false), null),
-                        listOf(null, Cell(1u, false), null),
-                        listOf(Cell(7u, false), Cell(2u, false), null),
-                    )
-                )
-            ),
-            listOf(
-                SubGrid(
-                    listOf(
-                        listOf(null, null, null),
-                        listOf(Cell(2u, false), Cell(6u, false), null),
-                        listOf(Cell(8u, false), Cell(3u, false), null),
-                    )
-                ),
-                SubGrid(
-                    listOf(
-                        listOf(null, null, Cell(8u, false)),
-                        listOf(null, Cell(4u, false), null),
-                        listOf(Cell(2u, false), Cell(9u, false), null),
-                    )
-                ),
-                SubGrid(
-                    listOf(
-                        listOf(Cell(2u, false), null, null),
-                        listOf(null, null, Cell(5u, false)),
-                        listOf(null, null, Cell(7u, false)),
-                    )
-                )
-            ),
-            listOf(
-                SubGrid(
-                    listOf(
-                        listOf(null, Cell(4u, false), Cell(3u, false)),
-                        listOf(Cell(6u, false), null, null),
-                        listOf(Cell(1u, false), Cell(9u, false), null),
-                    )
-                ),
-                SubGrid(
-                    listOf(
-                        listOf(null, Cell(6u, false), null),
-                        listOf(Cell(8u, false), null, Cell(5u, false)),
-                        listOf(Cell(4u, false), Cell(3u, false), null),
-                    )
-                ),
-                SubGrid(
-                    listOf(
-                        listOf(null, Cell(7u, false), Cell(8u, false)),
-                        listOf(null, Cell(4u, false), Cell(3u, false)),
-                        listOf(null, null, Cell(2u, false)),
-                    )
-                )
-            ),
-        )
-    )
+    private val initialGrid by lazy { repository.getUnsolved() }
 
     private val _state: MutableStateFlow<SudokuState> = MutableStateFlow(SudokuState(initialGrid, false))
     val state: StateFlow<SudokuState> = _state
@@ -97,12 +28,34 @@ class SudokuViewModel(dispatcher: CoroutineDispatcher) { // Make internal - need
             val initialState = _state.value
             val updatedGrid = initialState.grid.getUpdatedGrid(updatedValue, subGridCoordinates, cellCoordinates)
 
-            return@update SudokuState(updatedGrid, updatedGrid.isSolutionValid())
+            return@update SudokuState(updatedGrid, updatedGrid.isSolutionValid(subGridCoordinates, cellCoordinates))
         }
     }
 
-    private fun Grid.isSolutionValid(): Boolean {
-        return false
+    private fun Grid.isSolutionValid(subGridCoordinates: Coordinates, cellCoordinates: Coordinates): Boolean {
+        val subGridItems = this.items[subGridCoordinates.x][subGridCoordinates.y].items.flatten()
+        val isSubGridValid = subGridItems.isNotEmpty() && subGridItems.all { it != null } && subGridItems.toSet().count() == 9
+        if (!isSubGridValid) {
+            return false
+        }
+
+        val row = buildList {
+            items[subGridCoordinates.y].forEachIndexed { index, subGrid ->
+                addAll(subGrid.items[cellCoordinates.y])
+            }
+        }
+        val isRowValid = row.isNotEmpty() && row.all { it != null } && row.toSet().count() == 9
+        if (!isRowValid) {
+            return false
+        }
+
+        val column = buildList {
+            items[subGridCoordinates.x].forEachIndexed { index, subGrid ->
+                addAll(subGrid.items[cellCoordinates.x])
+            }
+        }
+        val isColumnValid = column.isNotEmpty() && column.all { it != null } && column.toSet().count() == 9
+        return isColumnValid
     }
 
     private fun Grid.getUpdatedGrid(
