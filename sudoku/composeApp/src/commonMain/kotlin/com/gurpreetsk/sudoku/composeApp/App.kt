@@ -1,7 +1,6 @@
 package com.gurpreetsk.sudoku.composeApp
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -11,23 +10,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.gurpreetsk.sudoku.shared.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(viewModel: SudokuViewModel) {
+fun App(
+    viewModel: SudokuViewModel,
+    onClose: () -> Unit
+) {
     MaterialTheme {
-        val gridState by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsState()
 
         Grid(
-            gridState.grid,
+            state.grid,
             { value, cellCoordinates, valueCoordinates -> viewModel.updateValue(value.toUInt(), cellCoordinates, valueCoordinates) },
             { println("Unsupported key clicked") },
             modifier = Modifier
                 .aspectRatio(1f)
                 .fillMaxSize()
         )
+
+        if (state.isSolved) {
+            Dialog(onDismissRequest = onClose) {
+                Text(
+                    "Sudoku solved successfully!",
+                    modifier = Modifier
+                        .background(Color.White)
+                        .padding(32.dp)
+                )
+            }
+        }
     }
 }
 

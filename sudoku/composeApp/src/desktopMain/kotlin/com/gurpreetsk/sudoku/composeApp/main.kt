@@ -11,6 +11,9 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "sudoku",
     ) {
-        App(SudokuViewModel(SingleSudokuRepository(), Dispatchers.Main))
+        App(
+            SudokuViewModel(SingleSudokuRepository(), Dispatchers.Main),
+            ::exitApplication
+        )
     }
 }
